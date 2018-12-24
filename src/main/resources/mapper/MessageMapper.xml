@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.connext.springboot.mapper.MessageMapper">
+<resultMap type="Message" id="getMessageMapper">
+    <id property="id" column="id" />
+    <result property="messagetitle" column="messagetitle" />
+    <result property="messagedetail" column="messagedetail" />
+    <result property="phone" column="phone" />
+    <result property="photo" column="photo" />
+    <result property="date" column="date" />
+</resultMap>
+
+
+<!-- 根据登陆用户查询相关消息 -->
+<select id="queryMessageByphone" parameterType="String" resultMap="getMessageMapper">
+    select * from message where phone=#{phone} order by date desc
+</select>
+
+<!-- 删除某一条消息 -->
+<delete id="deleteone" parameterType="Integer">
+    delete from message where id=#{id}
+</delete>
+
+<!-- 编辑某一条消息 -->
+<select id="editone" parameterType="Integer" resultMap="getMessageMapper">
+    select * from message where id=#{id}
+</select>
+
+<!-- 查询某个用户的总消息 -->
+<select id="MessageNum" parameterType="String" resultType="Integer">
+    select count(*) from message where phone=#{phone}
+</select>
+
+<!-- 修改某一条消息 -->
+<update id="updatemessage" parameterType="Message">
+    update message set messagetitle=#{messagetitle},messagedetail=#{messagedetail},date=#{date} where id=#{id}
+</update>
+
+<!-- 新增消息 -->
+<insert id="addmessage" parameterType="Message">
+    insert into message(phone,messagetitle,messagedetail,date,photo) values(#{phone},#{messagetitle},#{messagedetail},now(),#{photo})
+</insert>
+
+</mapper>
